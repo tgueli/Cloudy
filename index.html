@@ -13,10 +13,8 @@
                     colors: {
                         orsRed: '#DC2626',
                         orsRedDark: '#991B1B',
-                        orsNavy: '#1E3A8A',
-                        orsGold: '#F59E0B',
-                        skyBlue: '#38BDF8',
-                        grassGreen: '#22C55E'
+                        orsNavy: '#0F172A',
+                        orsGold: '#F59E0B'
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
@@ -26,353 +24,459 @@
         }
     </script>
     <style>
-        /* Custom Keyframe Animations for Mascot & Visual Effects */
-        @keyframes floatIdle {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-12px) rotate(1.5deg); }
+        /* Glassmorphism & Soft Modern UI Tokens */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
 
-        @keyframes tailSpin {
-            0% { transform: scaleX(1) skewX(0deg); }
-            25% { transform: scaleX(1.15) skewX(-6deg); }
-            50% { transform: scaleX(0.9) skewX(4deg); }
-            75% { transform: scaleX(1.2) skewX(-4deg); }
-            100% { transform: scaleX(1) skewX(0deg); }
+        .glass-header {
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Fluid Smooth Transitions */
+        .weather-stage {
+            transition: background 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .smooth-color {
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Mascot Animations */
+        @keyframes floatCloud {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1.2deg); }
         }
 
         @keyframes eyeBlink {
-            0%, 48%, 52%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(0.1); }
+            0%, 46%, 52%, 100% { transform: scaleY(1); }
+            49% { transform: scaleY(0.08); }
         }
 
         @keyframes boltPulse {
             0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 6px #ef4444); transform: scale(1); }
-            50% { opacity: 1; filter: drop-shadow(0 0 16px #f87171); transform: scale(1.18); }
+            50% { opacity: 1; filter: drop-shadow(0 0 16px #ef4444); transform: scale(1.15); }
         }
 
-        @keyframes zapJump {
-            0% { transform: translateY(0) scale(1); }
-            30% { transform: translateY(-30px) scale(1.12) rotate(-3deg); }
-            50% { transform: translateY(-35px) scale(1.15) rotate(3deg); }
-            75% { transform: translateY(-10px) scale(1.05); }
-            100% { transform: translateY(0) scale(1); }
+        @keyframes strikeFlash {
+            0% { opacity: 0; stroke-dashoffset: 1000; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; stroke-dashoffset: 0; }
         }
 
-        @keyframes flashEffect {
-            0% { opacity: 0.8; }
+        @keyframes flashOverlay {
+            0% { opacity: 0.5; }
             100% { opacity: 0; }
         }
 
-        /* Utility Animation Classes */
-        .animate-float {
-            animation: floatIdle 3.8s ease-in-out infinite;
+        @keyframes sunRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .animate-tail {
-            transform-origin: top center;
-            animation: tailSpin 1.8s ease-in-out infinite;
+        .animate-cloud-float {
+            animation: floatCloud 4.2s ease-in-out infinite;
         }
 
         .animate-blink {
+            transform-origin: 100px 88px;
+            animation: eyeBlink 4.5s infinite;
+        }
+
+        .animate-bolt-left {
+            animation: boltPulse 1.5s ease-in-out infinite;
+        }
+
+        .animate-bolt-right {
+            animation: boltPulse 1.8s ease-in-out infinite 0.3s;
+        }
+
+        .sun-spin {
+            animation: sunRotate 28s linear infinite;
             transform-origin: center;
-            animation: eyeBlink 5s infinite;
         }
 
-        .animate-bolt-1 {
-            animation: boltPulse 1.4s ease-in-out infinite;
+        .lightning-strike {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: strikeFlash 0.55s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
         }
 
-        .animate-bolt-2 {
-            animation: boltPulse 1.8s ease-in-out infinite 0.4s;
+        .screen-flash {
+            animation: flashOverlay 0.3s ease-out forwards;
         }
 
-        .animate-bolt-3 {
-            animation: boltPulse 1.2s ease-in-out infinite 0.8s;
+        /* Interactive Tier Button Micro-interactions */
+        .tier-btn {
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .tier-btn:hover {
+            transform: translateY(-4px);
+        }
+        .tier-btn:active {
+            transform: translateY(1px) scale(0.97);
+        }
+        .tier-btn:focus-visible {
+            outline: 3px solid #F59E0B;
+            outline-offset: 2px;
         }
 
-        .zap-active {
-            animation: zapJump 0.65s ease-out !important;
+        /* Custom Scrollbar for sleek fit */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-
-        .flash-overlay {
-            animation: flashEffect 0.35s ease-out forwards;
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
         }
-
-        /* High-Contrast Focus Ring for Accessibility & Senior Donors */
-        .donor-btn:focus-visible {
-            outline: 4px solid #F59E0B;
-            outline-offset: 3px;
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 99px;
         }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen flex items-center justify-center p-2 sm:p-4 font-sans antialiased text-slate-900">
+<body class="bg-slate-950 min-h-screen flex items-center justify-center p-3 sm:p-6 font-sans antialiased text-slate-800">
 
-    <!-- Container Widget Main Box -->
-    <main class="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border-4 border-orsNavy overflow-hidden relative my-auto">
+    <!-- Container Card -->
+    <main class="w-full max-w-xl bg-white/95 rounded-3xl shadow-2xl overflow-hidden relative border border-slate-800/20 my-auto flex flex-col">
         
-        <!-- Flash Light Screen Overlay Effect on Zap -->
-        <div id="flashOverlay" class="pointer-events-none absolute inset-0 bg-yellow-200 z-50 opacity-0"></div>
+        <!-- Screen Flash Overlay Effect on Zap -->
+        <div id="flashOverlay" class="pointer-events-none absolute inset-0 bg-red-200/40 z-50 opacity-0"></div>
 
-        <!-- Top Header Banner -->
-        <header class="bg-gradient-to-r from-orsNavy via-blue-900 to-orsNavy p-4 sm:p-5 text-white text-center border-b-4 border-orsGold relative">
-            <div class="flex items-center justify-between">
-                <span class="inline-block bg-orsRed text-white text-xs sm:text-sm font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md border border-white/20">
+        <!-- Sleek Glassmorphic Header -->
+        <header class="glass-header p-4 text-white text-center border-b border-white/10 relative z-20">
+            <div class="flex items-center justify-between mb-1.5">
+                <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-red-600 to-orsRed text-white text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                    <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
                     Operation Red Strike
                 </span>
                 
                 <!-- Audio Sound Toggle Button -->
-                <button id="audioToggleBtn" onclick="toggleAudio()" class="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700 text-yellow-300 font-bold text-xs sm:text-sm px-3 py-1.5 rounded-full border border-yellow-400/40 transition-all transform active:scale-95 shadow" aria-label="Toggle Sound Effects">
+                <button id="audioToggleBtn" onclick="toggleAudio()" class="flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700/80 text-amber-300 font-bold text-xs px-3 py-1 rounded-full border border-amber-400/30 transition-all shadow-sm" aria-label="Toggle Sound Effects">
                     <span id="audioIcon">⚡</span>
                     <span id="audioText">Sound: ON</span>
                 </button>
             </div>
             
-            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-2 text-white drop-shadow-md">
-                EXPAND OUR HOUSE MAJORITY!
+            <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white">
+                EXPAND OUR HOUSE MAJORITY
             </h1>
-            <p class="text-xs sm:text-sm font-semibold text-blue-200 mt-1">
-                See how your immediate contribution impacts key House battlegrounds.
+            <p class="text-xs text-slate-300 font-medium mt-0.5">
+                Select an impact level to deploy resources across battleground districts.
             </p>
         </header>
 
-        <!-- Dynamic Visual Area: Sky, Mascot, Hills & Path -->
-        <section class="relative bg-gradient-to-b from-sky-400 via-sky-200 to-emerald-200 h-72 sm:h-80 w-full overflow-hidden flex flex-col justify-between items-center p-3 select-none">
+        <!-- Dynamic Environment & Mascot Stage -->
+        <section id="skyStage" class="relative weather-stage bg-gradient-to-b from-slate-900 via-slate-800 to-slate-700 h-72 sm:h-84 w-full overflow-hidden flex flex-col justify-between items-center p-4 select-none">
             
-            <!-- Background Elements: Sun, Sky Clouds -->
-            <div class="absolute top-3 left-4 text-yellow-300 animate-pulse">
-                <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="5" />
-                    <path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41" />
+            <!-- Rainbow FX (Only visible on $500 highest tier) -->
+            <div id="rainbowContainer" class="absolute top-2 inset-x-0 h-40 opacity-0 transition-opacity duration-1000 pointer-events-none flex justify-center">
+                <svg class="w-full h-full max-w-md" viewBox="0 0 300 150">
+                    <path d="M 20 150 A 130 130 0 0 1 280 150" fill="none" stroke="#EF4444" stroke-width="4" opacity="0.35"/>
+                    <path d="M 30 150 A 120 120 0 0 1 270 150" fill="none" stroke="#F59E0B" stroke-width="4" opacity="0.35"/>
+                    <path d="M 40 150 A 110 110 0 0 1 260 150" fill="none" stroke="#10B981" stroke-width="4" opacity="0.35"/>
+                    <path d="M 50 150 A 100 100 0 0 1 250 150" fill="none" stroke="#3B82F6" stroke-width="4" opacity="0.35"/>
                 </svg>
             </div>
-            
-            <!-- Rolling Hills and Path Graphic (SVG Background Layer) -->
-            <svg class="absolute bottom-0 left-0 w-full h-32 text-emerald-500" preserveAspectRatio="none" viewBox="0 0 500 150">
-                <!-- Background Hill -->
-                <path fill="#16a34a" d="M0,80 Q150,40 300,90 T500,60 L500,150 L0,150 Z"></path>
-                <!-- Foreground Hill -->
-                <path fill="#22c55e" d="M0,100 Q200,60 500,110 L500,150 L0,150 Z"></path>
-                <!-- Winding Dirt Path -->
-                <path fill="#d97706" opacity="0.8" d="M220,150 C230,120 240,110 250,95 C260,110 270,120 280,150 Z"></path>
-            </svg>
 
-            <!-- Dynamic Senior-Friendly Speech Bubble -->
-            <div class="relative z-20 max-w-md w-full bg-white/95 backdrop-blur-sm border-3 border-orsNavy rounded-2xl p-3 sm:p-4 text-center shadow-xl transition-all duration-300 transform mt-1">
-                <p id="speechBubbleText" class="text-sm sm:text-base font-extrabold text-slate-800 leading-snug">
-                    "Select a donation level below to power Operation Red Strike's rapid response team!"
-                </p>
-                <!-- Speech Bubble Arrow -->
-                <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[12px] border-t-white"></div>
+            <!-- Dynamic Sun & Rays (Transitions based on weather tier) -->
+            <div id="sunContainer" class="absolute top-3 right-4 text-amber-300 transition-all duration-1000 opacity-20 scale-50">
+                <svg class="w-16 h-16 sm:w-20 sm:h-20" viewBox="0 0 100 100" fill="currentColor">
+                    <g class="sun-spin">
+                        <path d="M50 10 L50 0 M50 90 L50 100 M10 50 L0 50 M90 50 L100 50 M22 22 L15 15 M78 78 L85 85 M22 78 L15 85 M78 22 L85 15" stroke="#F59E0B" stroke-width="6" stroke-linecap="round"/>
+                    </g>
+                    <circle cx="50" cy="50" r="28" fill="#FBBF24" stroke="#F59E0B" stroke-width="3" />
+                    <circle cx="42" cy="44" r="3" fill="#78350F"/>
+                    <circle cx="58" cy="44" r="3" fill="#78350F"/>
+                    <path d="M 42 54 Q 50 62 58 54" fill="none" stroke="#78350F" stroke-width="3" stroke-linecap="round"/>
+                </svg>
             </div>
 
-            <!-- Mascot Container (SVG Character Artwork with Animation) -->
-            <div id="mascotContainer" class="relative z-10 animate-float cursor-pointer mt-auto mb-2" onclick="triggerMascotZap()">
-                <svg class="w-44 h-44 sm:w-52 sm:h-52 filter drop-shadow-xl" viewBox="0 0 200 200">
+            <!-- Drizzle/Storm Lines for $25 tier -->
+            <div id="rainContainer" class="absolute inset-0 pointer-events-none opacity-80 transition-opacity duration-1000">
+                <svg class="w-full h-full" viewBox="0 0 400 200">
+                    <line x1="40" y1="10" x2="30" y2="50" stroke="#94A3B8" stroke-width="1.5" opacity="0.3" />
+                    <line x1="120" y1="30" x2="110" y2="70" stroke="#94A3B8" stroke-width="1.5" opacity="0.3" />
+                    <line x1="220" y1="15" x2="210" y2="55" stroke="#94A3B8" stroke-width="1.5" opacity="0.3" />
+                    <line x1="320" y1="40" x2="310" y2="80" stroke="#94A3B8" stroke-width="1.5" opacity="0.3" />
+                </svg>
+            </div>
+
+            <!-- Speech Bubble Panel -->
+            <div class="relative z-20 w-full max-w-md glass-card border border-white/60 rounded-2xl p-3 sm:p-3.5 text-center shadow-lg transition-all duration-300 mt-1">
+                <p id="speechBubbleText" class="text-xs sm:text-sm font-bold text-slate-800 leading-snug">
+                    "Select a contribution level below to power Operation Red Strike!"
+                </p>
+                <!-- Pointer Arrow -->
+                <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[9px] border-t-white/90"></div>
+            </div>
+
+            <!-- Mascot & Lightning Stage Container -->
+            <div class="relative z-10 flex flex-col items-center mt-auto mb-1">
+                
+                <!-- Animated SVG Red Lightning Strikes (Triggers downward on tier click) -->
+                <svg id="lightningSvg" class="absolute -top-12 left-1/2 -translate-x-1/2 w-full h-80 pointer-events-none z-30 overflow-visible" viewBox="0 0 400 300">
                     <defs>
-                        <!-- Mascot Cloud Gradient -->
-                        <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#FFFFFF" />
-                            <stop offset="70%" stop-color="#E2E8F0" />
-                            <stop offset="100%" stop-color="#94A3B8" />
-                        </linearGradient>
-                        
-                        <!-- Lightning Glow Filter -->
-                        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                            <feGaussianBlur stdDeviation="3" result="blur" />
-                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                        <filter id="redGlow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feGaussianBlur stdDeviation="5" result="blur" />
+                            <feMerge>
+                                <feMergeNode in="blur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
                         </filter>
                     </defs>
 
-                    <!-- Floating Red Lightning Bolts Around Mascot -->
-                    <!-- Left Bolt -->
-                    <path class="animate-bolt-1" fill="#DC2626" filter="url(#glow)" d="M 25 70 L 40 45 L 32 75 L 48 70 L 22 105 L 28 80 Z" />
-                    <!-- Right Bolt -->
-                    <path class="animate-bolt-2" fill="#EF4444" filter="url(#glow)" d="M 160 50 L 175 30 L 168 55 L 182 50 L 158 80 L 164 62 Z" />
-                    <!-- Top Right Floating Bolt -->
-                    <path class="animate-bolt-3" fill="#B91C1C" filter="url(#glow)" d="M 145 110 L 158 95 L 150 115 L 162 112 L 140 135 L 146 120 Z" />
+                    <!-- Left Downward Strike -->
+                    <path id="strikeLeft" class="hidden" fill="none" stroke="#EF4444" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#redGlow)"
+                          d="M 150 120 L 120 170 L 140 175 L 70 240 L 95 235 L 40 290" />
 
-                    <!-- Swirling Tornado Tail -->
-                    <g class="animate-tail">
-                        <path fill="#94A3B8" opacity="0.9" d="M 80 140 C 70 155, 110 160, 95 172 C 85 180, 105 185, 100 192 C 102 192, 108 185, 105 172 C 120 160, 90 155, 120 140 Z" />
-                        <path fill="#CBD5E1" d="M 88 145 Q 100 155 92 165 T 100 188" stroke="#64748B" stroke-width="3" fill="none" stroke-linecap="round" />
-                    </g>
+                    <!-- Right Downward Strike -->
+                    <path id="strikeRight" class="hidden" fill="none" stroke="#DC2626" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#redGlow)"
+                          d="M 250 120 L 280 165 L 260 172 L 330 240 L 305 243 L 360 295" />
 
-                    <!-- Mascot Cloud Body -->
-                    <g id="cloudBody">
-                        <path fill="url(#cloudGrad)" stroke="#475569" stroke-width="4" stroke-linejoin="round"
-                              d="M 50 120 
-                                 A 25 25 0 0 1 40 75 
-                                 A 30 30 0 0 1 75 40 
-                                 A 35 35 0 0 1 130 40 
-                                 A 30 30 0 0 1 165 75 
-                                 A 25 25 0 0 1 150 120 
-                                 Z" />
-                        <!-- Highlighting Cloud Curves -->
-                        <path d="M 55 70 A 20 20 0 0 1 80 48" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" />
-                    </g>
-
-                    <!-- Big Expressive Cute Eyes -->
-                    <g id="eyes" class="animate-blink">
-                        <!-- Left Eye -->
-                        <ellipse cx="80" cy="80" rx="10" ry="14" fill="#0F172A" />
-                        <circle cx="77" cy="74" r="4" fill="#FFFFFF" />
-                        <circle cx="82" cy="84" r="1.5" fill="#FFFFFF" />
-                        
-                        <!-- Right Eye -->
-                        <ellipse cx="120" cy="80" rx="10" ry="14" fill="#0F172A" />
-                        <circle cx="117" cy="74" r="4" fill="#FFFFFF" />
-                        <circle cx="122" cy="84" r="1.5" fill="#FFFFFF" />
-                    </g>
-
-                    <!-- Cute Rosy Cheeks -->
-                    <ellipse cx="68" cy="94" rx="7" ry="4" fill="#F87171" opacity="0.6" />
-                    <ellipse cx="132" cy="94" rx="7" ry="4" fill="#F87171" opacity="0.6" />
-
-                    <!-- Big Happy Smiling Mouth -->
-                    <path id="mouth" d="M 85 96 Q 100 118 115 96 Z" fill="#DC2626" stroke="#0F172A" stroke-width="2.5" />
-                    <path d="M 92 108 Q 100 114 108 108" fill="#FCA5A5" />
-
-                    <!-- Floating Center Crest Symbol -->
-                    <polygon points="100,45 104,55 112,55 105,61 108,70 100,64 92,70 95,61 88,55 96,55" fill="#F59E0B" />
+                    <!-- Center Downward Strike -->
+                    <path id="strikeCenter" class="hidden" fill="none" stroke="#F87171" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#redGlow)"
+                          d="M 200 130 L 190 180 L 210 185 L 180 255 L 202 250 L 190 298" />
                 </svg>
+
+                <!-- Cloud Character (Matches Reference Image: Dark slate gradient, fluffy contour, no star) -->
+                <div id="mascotContainer" class="animate-cloud-float cursor-pointer relative" onclick="triggerLightningZap()">
+                    <svg class="w-44 h-40 sm:w-52 sm:h-48 filter drop-shadow-2xl overflow-visible" viewBox="0 0 200 180">
+                        <defs>
+                            <linearGradient id="refCloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#94A3B8" />
+                                <stop offset="45%" stop-color="#64748B" />
+                                <stop offset="100%" stop-color="#475569" />
+                            </linearGradient>
+
+                            <linearGradient id="cloudHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#CBD5E1" stop-opacity="0.8"/>
+                                <stop offset="100%" stop-color="#94A3B8" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Floating Red Accent Bolts -->
+                        <path class="animate-bolt-left" fill="#EF4444" stroke="#B91C1C" stroke-width="2" stroke-linejoin="round"
+                              d="M 22 45 L 48 10 L 36 50 L 58 46 L 15 95 L 24 60 Z" />
+
+                        <path class="animate-bolt-right" fill="#EF4444" stroke="#B91C1C" stroke-width="2" stroke-linejoin="round"
+                              d="M 178 35 L 152 5 L 164 42 L 142 40 L 182 88 L 172 52 Z" />
+
+                        <!-- Cloud Character Dark Shadow Outer Ring -->
+                        <path fill="#334155" d="M 40 130 
+                                 C 15 130, 5 105, 20 85 
+                                 C 10 65, 30 40, 60 45 
+                                 C 75 25, 115 20, 135 40 
+                                 C 165 30, 190 55, 180 80 
+                                 C 195 105, 175 135, 150 132 
+                                 C 135 145, 65 148, 40 130 Z" />
+
+                        <!-- Cloud Main Fluffy Body -->
+                        <path fill="url(#refCloudGrad)" stroke="#1E293B" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"
+                              d="M 42 126 
+                                 C 20 126, 12 102, 25 84 
+                                 C 15 65, 35 42, 62 48 
+                                 C 78 28, 116 24, 134 42 
+                                 C 162 34, 184 58, 176 82 
+                                 C 188 104, 170 128, 146 128 
+                                 C 130 142, 68 142, 42 126 Z" />
+
+                        <!-- Fluff Highlight Curvatures -->
+                        <path fill="url(#cloudHighlight)" d="M 65 48 C 80 32, 112 30, 130 44 C 110 38, 80 40, 65 48 Z" />
+                        <path fill="url(#cloudHighlight)" d="M 28 84 C 20 70, 36 52, 58 52 C 40 56, 28 72, 28 84 Z" />
+
+                        <!-- Eyebrows -->
+                        <path d="M 70 66 Q 82 60 92 68" fill="none" stroke="#1E293B" stroke-width="3.5" stroke-linecap="round" />
+                        <path d="M 108 68 Q 118 60 130 66" fill="none" stroke="#1E293B" stroke-width="3.5" stroke-linecap="round" />
+
+                        <!-- Glossy Cute Eyes -->
+                        <g id="cloudEyes" class="animate-blink">
+                            <ellipse cx="82" cy="88" rx="12" ry="16" fill="#0F172A" />
+                            <circle cx="78" cy="82" r="5" fill="#FFFFFF" />
+                            <circle cx="85" cy="93" r="2" fill="#FFFFFF" />
+
+                            <ellipse cx="118" cy="88" rx="12" ry="16" fill="#0F172A" />
+                            <circle cx="114" cy="82" r="5" fill="#FFFFFF" />
+                            <circle cx="121" cy="93" r="2" fill="#FFFFFF" />
+                        </g>
+
+                        <!-- Rosy Blush Cheeks -->
+                        <ellipse cx="66" cy="102" rx="8" ry="4" fill="#F87171" opacity="0.65" />
+                        <ellipse cx="134" cy="102" rx="8" ry="4" fill="#F87171" opacity="0.65" />
+
+                        <!-- Open Smile Mouth with Tongue -->
+                        <path d="M 76 104 Q 100 132 124 104 Z" fill="#DC2626" stroke="#0F172A" stroke-width="3.5" stroke-linejoin="round" />
+                        <path d="M 86 117 Q 100 126 114 117 Q 100 110 86 117 Z" fill="#FCA5A5" />
+                    </svg>
+                </div>
             </div>
+
+            <!-- Rolling Landscape Floor -->
+            <svg class="absolute bottom-0 left-0 w-full h-14 sm:h-16 text-emerald-500 pointer-events-none transition-all duration-1000" preserveAspectRatio="none" viewBox="0 0 500 100">
+                <path id="hillBack" fill="#0F5132" class="smooth-color" d="M0,40 Q150,10 300,50 T500,20 L500,100 L0,100 Z"></path>
+                <path id="hillFront" fill="#146C43" class="smooth-color" d="M0,60 Q200,20 500,60 L500,100 L0,100 Z"></path>
+            </svg>
         </section>
 
         <!-- Seat Expansion Progress Meter -->
-        <section class="bg-slate-900 text-white p-4 border-y-4 border-orsGold">
-            <div class="flex justify-between items-center mb-1.5 font-bold text-xs sm:text-sm">
-                <span class="text-yellow-400 flex items-center gap-1">
-                    <svg class="w-4 h-4 inline" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3.005 3.005 0 013.75-2.906z"></path></svg>
-                    HOUSE SEAT EXPANSION IMPACT
+        <section class="bg-slate-900 text-white p-3 sm:p-3.5 border-y border-slate-800">
+            <div class="flex justify-between items-center mb-1 font-bold text-xs">
+                <span class="text-amber-400 flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3.005 3.005 0 013.75-2.906z"></path></svg>
+                    CAMPAIGN IMPACT METER
                 </span>
-                <span id="seatImpactCount" class="text-emerald-400 font-extrabold text-sm sm:text-base">
-                    +0 District Ops Boosted
+                <span id="seatImpactCount" class="text-emerald-400 font-black text-xs">
+                    +12 District Ops Boosted
                 </span>
             </div>
             
-            <!-- Progress Bar Frame -->
-            <div class="w-full bg-slate-700 h-6 rounded-full overflow-hidden p-1 border border-slate-500 shadow-inner">
-                <div id="progressBar" class="bg-gradient-to-r from-red-600 via-orsRed to-emerald-400 h-full rounded-full transition-all duration-700 ease-out w-12 flex items-center justify-end pr-2">
+            <div class="w-full bg-slate-800 h-4.5 rounded-full overflow-hidden p-0.5 border border-slate-700">
+                <div id="progressBar" class="bg-gradient-to-r from-red-600 via-orsRed to-emerald-400 h-full rounded-full transition-all duration-700 ease-out w-2/3 flex items-center justify-end pr-1">
                     <div class="w-2 h-2 bg-white rounded-full animate-ping"></div>
                 </div>
             </div>
-            <div class="flex justify-between text-[10px] sm:text-xs text-slate-400 mt-1 font-semibold">
-                <span>Baseline Hold</span>
-                <span>Battleground Hold</span>
-                <span class="text-yellow-300">Majority Expanded 🔥</span>
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1 font-semibold">
+                <span>Hold Baseline</span>
+                <span>Secure Battlegrounds</span>
+                <span class="text-amber-300">Expand Majority 🔥</span>
             </div>
         </section>
 
-        <!-- Interactive Donation Amount Selector & Controls -->
-        <section class="p-4 sm:p-6 bg-slate-50">
-            <label class="block text-center text-slate-800 font-extrabold text-sm sm:text-base mb-3 uppercase tracking-wide">
-                Select Contribution Amount to Activate Impact:
+        <!-- Clean Interactive Tier Grid Container -->
+        <section class="p-4 sm:p-5 bg-slate-50/90 flex-1">
+            <label class="block text-center text-slate-600 font-extrabold text-xs mb-3 uppercase tracking-wider">
+                Select Your Contribution Tier:
             </label>
 
-            <!-- Donation Buttons Grid (Large Touch Targets for Senior Donors) -->
-            <div class="grid grid-cols-3 gap-2.5 sm:gap-3 mb-4">
-                <button onclick="selectDonation(25, this)" class="donor-btn group relative bg-white hover:bg-red-50 border-3 border-slate-300 hover:border-orsRed rounded-2xl p-3 sm:p-4 text-center transition-all transform active:scale-95 shadow-md">
-                    <span class="block text-xl sm:text-2xl font-black text-slate-900 group-hover:text-orsRed">$25</span>
-                    <span class="block text-[10px] sm:text-xs font-bold text-slate-500 mt-0.5">Grassroots</span>
+            <!-- Grid Tiers -->
+            <div class="grid grid-cols-3 gap-2.5 sm:gap-3 mb-3">
+                <button onclick="selectDonation(25, this)" class="tier-btn group relative bg-white border border-slate-200 hover:border-orsRed rounded-2xl p-3 text-center shadow-sm">
+                    <span class="block text-xl font-black text-slate-900 group-hover:text-orsRed">$25</span>
+                    <span class="block text-[10px] font-bold text-slate-500 mt-0.5">Grassroots</span>
                 </button>
 
-                <button onclick="selectDonation(50, this)" class="donor-btn group relative bg-white hover:bg-red-50 border-3 border-slate-300 hover:border-orsRed rounded-2xl p-3 sm:p-4 text-center transition-all transform active:scale-95 shadow-md">
-                    <span class="block text-xl sm:text-2xl font-black text-slate-900 group-hover:text-orsRed">$50</span>
-                    <span class="block text-[10px] sm:text-xs font-bold text-slate-500 mt-0.5">Defender</span>
+                <button onclick="selectDonation(50, this)" class="tier-btn group relative bg-white border border-slate-200 hover:border-orsRed rounded-2xl p-3 text-center shadow-sm">
+                    <span class="block text-xl font-black text-slate-900 group-hover:text-orsRed">$50</span>
+                    <span class="block text-[10px] font-bold text-slate-500 mt-0.5">Defender</span>
                 </button>
 
-                <button onclick="selectDonation(100, this)" class="donor-btn group relative bg-white hover:bg-red-50 border-3 border-slate-300 hover:border-orsRed rounded-2xl p-3 sm:p-4 text-center transition-all transform active:scale-95 shadow-md">
-                    <span class="block text-xl sm:text-2xl font-black text-slate-900 group-hover:text-orsRed">$100</span>
-                    <span class="block text-[10px] sm:text-xs font-bold text-slate-500 mt-0.5">Patriot</span>
+                <button onclick="selectDonation(100, this)" class="tier-btn group relative bg-white border border-slate-200 hover:border-orsRed rounded-2xl p-3 text-center shadow-sm">
+                    <span class="block text-xl font-black text-slate-900 group-hover:text-orsRed">$100</span>
+                    <span class="block text-[10px] font-bold text-slate-500 mt-0.5">Patriot</span>
                 </button>
 
-                <button onclick="selectDonation(250, this)" class="donor-btn group relative bg-white hover:bg-red-50 border-3 border-slate-300 hover:border-orsRed rounded-2xl p-3 sm:p-4 text-center transition-all transform active:scale-95 shadow-md">
-                    <span class="block text-xl sm:text-2xl font-black text-slate-900 group-hover:text-orsRed">$250</span>
-                    <span class="block text-[10px] sm:text-xs font-bold text-slate-500 mt-0.5">Leader</span>
+                <button onclick="selectDonation(250, this)" class="tier-btn group relative bg-white border border-slate-200 hover:border-orsRed rounded-2xl p-3 text-center shadow-sm">
+                    <span class="block text-xl font-black text-slate-900 group-hover:text-orsRed">$250</span>
+                    <span class="block text-[10px] font-bold text-slate-500 mt-0.5">Leader</span>
                 </button>
 
-                <button onclick="selectDonation(500, this)" class="donor-btn group relative bg-white hover:bg-red-50 border-3 border-slate-300 hover:border-orsRed rounded-2xl p-3 sm:p-4 text-center transition-all transform active:scale-95 shadow-md">
-                    <span class="block text-xl sm:text-2xl font-black text-slate-900 group-hover:text-orsRed">$500</span>
-                    <span class="block text-[10px] sm:text-xs font-bold text-slate-500 mt-0.5">Champion</span>
+                <button onclick="selectDonation(500, this)" class="tier-btn group relative bg-white border border-slate-200 hover:border-orsRed rounded-2xl p-3 text-center shadow-sm">
+                    <span class="block text-xl font-black text-slate-900 group-hover:text-orsRed">$500</span>
+                    <span class="block text-[10px] font-bold text-slate-500 mt-0.5">Champion</span>
                 </button>
 
-                <!-- Custom Amount Button -->
-                <button onclick="focusCustomInput()" class="donor-btn group relative bg-amber-50 hover:bg-amber-100 border-3 border-amber-300 hover:border-amber-500 rounded-2xl p-3 sm:p-4 text-center transition-all transform active:scale-95 shadow-md">
-                    <span class="block text-lg sm:text-xl font-black text-amber-900">Custom</span>
-                    <span class="block text-[10px] sm:text-xs font-bold text-amber-700 mt-0.5">Other Amount</span>
+                <button onclick="focusCustomInput()" class="tier-btn group relative bg-amber-50/70 border border-amber-300 hover:border-amber-500 rounded-2xl p-3 text-center shadow-sm">
+                    <span class="block text-lg font-black text-amber-900">Custom</span>
+                    <span class="block text-[10px] font-bold text-amber-700 mt-0.5">Other</span>
                 </button>
             </div>
 
-            <!-- Custom Amount Input Field Container -->
-            <div id="customInputContainer" class="hidden mb-4 bg-amber-100/60 p-3 rounded-2xl border-2 border-amber-400">
+            <!-- Custom Input Container -->
+            <div id="customInputContainer" class="hidden mb-2 bg-amber-50 p-3 rounded-2xl border border-amber-300">
                 <label for="customAmount" class="block text-xs font-bold text-amber-900 mb-1">Enter Custom Amount ($ USD):</label>
                 <div class="flex gap-2">
                     <div class="relative flex-1">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-lg font-bold text-slate-600">$</span>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-base font-bold text-slate-500">$</span>
                         <input type="number" id="customAmount" min="1" max="10000" placeholder="75" 
-                               class="w-full pl-8 pr-3 py-2 text-lg font-bold rounded-xl border-2 border-slate-300 focus:border-orsRed focus:outline-none"
+                               class="w-full pl-7 pr-3 py-1.5 text-base font-bold rounded-xl border border-slate-300 focus:border-orsRed focus:outline-none"
                                oninput="handleCustomInput(this.value)">
                     </div>
-                    <button onclick="applyCustomAmount()" class="bg-orsRed text-white font-extrabold px-5 py-2 rounded-xl hover:bg-red-700 transition">
+                    <button onclick="applyCustomAmount()" class="bg-orsRed text-white font-extrabold px-4 py-1.5 rounded-xl hover:bg-red-700 transition text-sm">
                         Apply
                     </button>
                 </div>
             </div>
 
-            <!-- Main Call to Action Button redirecting to WinRed -->
-            <button id="ctaDonateBtn" onclick="executeWinRedRedirection()" class="w-full bg-gradient-to-r from-red-600 via-orsRed to-red-700 hover:from-red-700 hover:to-red-800 text-white font-black text-lg sm:text-2xl py-4 px-6 rounded-2xl shadow-xl hover:shadow-2xl border-b-4 border-red-950 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3">
-                <span>⚡ RALLY FOR OPERATION RED STRIKE ⚡</span>
-            </button>
-            <p class="text-[11px] text-center text-slate-500 mt-2 font-medium">
-                Contributions go directly toward securing Republican House seats.
+            <p class="text-[11px] text-center text-slate-400 mt-2 font-medium">
+                Live field calculator powered by Operation Red Strike.
             </p>
         </section>
 
     </main>
 
-    <!-- JavaScript logic & Web Audio API synthesizer -->
+    <!-- Audio Synthesizer & Interactive Logic -->
     <script>
-        // State variables
         let soundEnabled = true;
         let activeAmount = 100;
         let audioCtx = null;
 
-        // Data dictionary for donation impact copy and seat progress metrics
+        // Tier mapped data for weather stages, copy, meter progress and colors
         const impactMap = {
             25: {
                 text: "⚡ $25 deploys 1,500 direct voter turnout text alerts to key conservative voters in swing House districts!",
                 progress: 20,
-                seats: "+2 District Ops Boosted"
+                seats: "+2 District Ops Boosted",
+                skyGrad: "from-slate-950 via-slate-900 to-slate-800", // Dark Stormy
+                sunOpacity: "opacity-0 scale-50",
+                rainOpacity: "opacity-90",
+                rainbowOpacity: "opacity-0",
+                hillBack: "#064e3b",
+                hillFront: "#022c22"
             },
             50: {
                 text: "💥 $50 funds targeted digital ad campaigns targeting undecided voters in critical House battlegrounds!",
                 progress: 40,
-                seats: "+5 District Ops Boosted"
+                seats: "+5 District Ops Boosted",
+                skyGrad: "from-slate-800 via-slate-700 to-slate-600", // Clearing Overcast
+                sunOpacity: "opacity-40 scale-75",
+                rainOpacity: "opacity-20",
+                rainbowOpacity: "opacity-0",
+                hillBack: "#0f5132",
+                hillFront: "#146c43"
             },
             100: {
                 text: "🔥 $100 launches comprehensive ground-game turnout operations to firmly expand our House Majority!",
                 progress: 65,
-                seats: "+12 District Ops Boosted"
+                seats: "+12 District Ops Boosted",
+                skyGrad: "from-sky-600 via-sky-400 to-emerald-300", // Bright Morning Sky
+                sunOpacity: "opacity-80 scale-100",
+                rainOpacity: "opacity-0",
+                rainbowOpacity: "opacity-0",
+                hillBack: "#15803d",
+                hillFront: "#22c55e"
             },
             250: {
                 text: "🚀 $250 counters radical opposition TV broadcasts with high-impact truth campaigns in toss-up races!",
                 progress: 85,
-                seats: "+25 District Ops Boosted"
+                seats: "+25 District Ops Boosted",
+                skyGrad: "from-sky-400 via-cyan-200 to-emerald-200", // Vibrant Blue Sky
+                sunOpacity: "opacity-95 scale-110",
+                rainOpacity: "opacity-0",
+                rainbowOpacity: "opacity-0",
+                hillBack: "#16a34a",
+                hillFront: "#4ade80"
             },
             500: {
                 text: "🏆 $500 unleashes rapid-response war room operations to lock in victory in top target districts!",
                 progress: 100,
-                seats: "+40 District Ops Boosted"
+                seats: "+40 District Ops Boosted",
+                skyGrad: "from-amber-300 via-yellow-100 to-emerald-200", // Full Golden Victory Sunshine
+                sunOpacity: "opacity-100 scale-125",
+                rainOpacity: "opacity-0",
+                rainbowOpacity: "opacity-100",
+                hillBack: "#22c55e",
+                hillFront: "#86efac"
             }
         };
 
-        // Initialize Web Audio Context lazily on user gesture
         function getAudioContext() {
             if (!audioCtx) {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (AudioContext) {
-                    audioCtx = new AudioContext();
-                }
+                if (AudioContext) audioCtx = new AudioContext();
             }
             if (audioCtx && audioCtx.state === 'suspended') {
                 audioCtx.resume();
@@ -380,7 +484,6 @@
             return audioCtx;
         }
 
-        // Toggle Audio Effects (ON/MUTE)
         function toggleAudio() {
             soundEnabled = !soundEnabled;
             const icon = document.getElementById('audioIcon');
@@ -389,187 +492,179 @@
             if (soundEnabled) {
                 icon.innerText = "⚡";
                 text.innerText = "Sound: ON";
-                playLightningAudio(); // Sound test on toggle
+                playLightningAudio();
             } else {
                 icon.innerText = "🔇";
                 text.innerText = "Sound: MUTE";
             }
         }
 
-        // Synthesize Realistic Thunder Crackle & Electric Lightning Zap using Web Audio API
         function playLightningAudio() {
             if (!soundEnabled) return;
 
             try {
                 const ctx = getAudioContext();
                 if (!ctx) return;
-
                 const now = ctx.currentTime;
 
-                // 1. Electric High-Pitch Zap Synthesis (Oscillator Frequency Slide)
+                // Electric Zap Oscillator
                 const osc = ctx.createOscillator();
                 const oscGain = ctx.createGain();
-
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(800, now);
-                osc.frequency.exponentialRampToValueAtTime(120, now + 0.15);
-
-                oscGain.gain.setValueAtTime(0.3, now);
-                oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-
+                osc.frequency.setValueAtTime(850, now);
+                osc.frequency.exponentialRampToValueAtTime(120, now + 0.16);
+                oscGain.gain.setValueAtTime(0.2, now);
+                oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
                 osc.connect(oscGain);
                 oscGain.connect(ctx.destination);
-
                 osc.start(now);
-                osc.stop(now + 0.15);
+                osc.stop(now + 0.16);
 
-                // 2. Thunder Crackle & Rumble (Synthesized White Noise Buffer)
-                const bufferSize = ctx.sampleRate * 0.4; // 400ms sound
+                // Thunder Noise
+                const bufferSize = ctx.sampleRate * 0.3;
                 const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
                 const data = buffer.getChannelData(0);
-
                 for (let i = 0; i < bufferSize; i++) {
-                    data[i] = Math.random() * 2 - 1; // White noise
+                    data[i] = Math.random() * 2 - 1;
                 }
 
                 const noise = ctx.createBufferSource();
                 noise.buffer = buffer;
-
-                // Filter for deep thunder rumble
                 const filter = ctx.createBiquadFilter();
                 filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(1000, now);
-                filter.frequency.linearRampToValueAtTime(200, now + 0.35);
+                filter.frequency.setValueAtTime(700, now);
+                filter.frequency.linearRampToValueAtTime(150, now + 0.28);
 
                 const noiseGain = ctx.createGain();
-                noiseGain.gain.setValueAtTime(0.5, now);
-                noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.38);
+                noiseGain.gain.setValueAtTime(0.3, now);
+                noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
 
                 noise.connect(filter);
                 filter.connect(noiseGain);
                 noiseGain.connect(ctx.destination);
-
                 noise.start(now);
-                noise.stop(now + 0.4);
-
+                noise.stop(now + 0.3);
             } catch (e) {
-                console.warn("Web Audio playback failed:", e);
+                console.warn("Audio error", e);
             }
         }
 
-        // Trigger Mascot Animation & Screen Flash Effect
-        function triggerMascotZap() {
+        function triggerLightningZap() {
             playLightningAudio();
 
-            // Mascot Jump/Zap Animation
-            const mascot = document.getElementById('mascotContainer');
-            mascot.classList.remove('zap-active');
-            void mascot.offsetWidth; // Force CSS reflow
-            mascot.classList.add('zap-active');
-
-            // Screen Flash Effect
             const flash = document.getElementById('flashOverlay');
-            flash.classList.remove('flash-overlay');
+            flash.classList.remove('screen-flash');
             void flash.offsetWidth;
-            flash.classList.add('flash-overlay');
-        }
+            flash.classList.add('screen-flash');
 
-        // Donation Selection Handler
-        function selectDonation(amount, buttonEl) {
-            activeAmount = amount;
-            
-            // Hide custom input container
-            document.getElementById('customInputContainer').classList.add('hidden');
+            const strikes = [
+                document.getElementById('strikeLeft'),
+                document.getElementById('strikeRight'),
+                document.getElementById('strikeCenter')
+            ];
 
-            // Reset active styles on buttons
-            document.querySelectorAll('.donor-btn').forEach(btn => {
-                btn.classList.remove('border-orsRed', 'bg-red-50', 'ring-4', 'ring-red-200');
+            strikes.forEach(s => {
+                s.classList.add('hidden');
+                s.classList.remove('lightning-strike');
             });
 
-            // Highlight selected button if element passed
-            if (buttonEl) {
-                buttonEl.classList.add('border-orsRed', 'bg-red-50', 'ring-4', 'ring-red-200');
-            }
+            const targetStrike1 = strikes[Math.floor(Math.random() * strikes.length)];
+            targetStrike1.classList.remove('hidden');
+            void targetStrike1.offsetWidth;
+            targetStrike1.classList.add('lightning-strike');
 
-            // Update Impact Copy and Progress Meter
-            updateImpactDisplay(amount);
-
-            // Trigger visual and audio reactions
-            triggerMascotZap();
+            setTimeout(() => {
+                const targetStrike2 = strikes[Math.floor(Math.random() * strikes.length)];
+                targetStrike2.classList.remove('hidden');
+                void targetStrike2.offsetWidth;
+                targetStrike2.classList.add('lightning-strike');
+            }, 70);
         }
 
-        // Dynamic Display Update Logic
-        function updateImpactDisplay(amount) {
+        function selectDonation(amount, buttonEl) {
+            activeAmount = amount;
+            document.getElementById('customInputContainer').classList.add('hidden');
+
+            document.querySelectorAll('.tier-btn').forEach(btn => {
+                btn.classList.remove('border-orsRed', 'bg-red-50', 'ring-2', 'ring-red-200');
+            });
+
+            if (buttonEl) {
+                buttonEl.classList.add('border-orsRed', 'bg-red-50', 'ring-2', 'ring-red-200');
+            }
+
+            updateDisplay(amount);
+            triggerLightningZap();
+        }
+
+        function updateDisplay(amount) {
             const bubble = document.getElementById('speechBubbleText');
             const progress = document.getElementById('progressBar');
             const seatCount = document.getElementById('seatImpactCount');
-            const ctaBtn = document.getElementById('ctaDonateBtn');
+            const skyStage = document.getElementById('skyStage');
+            const sunContainer = document.getElementById('sunContainer');
+            const rainContainer = document.getElementById('rainContainer');
+            const rainbowContainer = document.getElementById('rainbowContainer');
+            const hillBack = document.getElementById('hillBack');
+            const hillFront = document.getElementById('hillFront');
 
             let impact = impactMap[amount];
 
             if (!impact) {
-                // Calculate dynamic metrics for custom amounts
                 const calcBoost = Math.max(1, Math.floor(amount / 12));
                 const calcProgress = Math.min(100, Math.max(15, Math.floor(amount / 5)));
                 impact = {
-                    text: `⚡ A $${amount} contribution unleashes crucial tactical resources to secure victory in target House seats!`,
+                    text: `⚡ A $${amount} contribution unleashes crucial field resources to secure key House seats!`,
                     progress: calcProgress,
-                    seats: `+${calcBoost} District Ops Boosted`
+                    seats: `+${calcBoost} District Ops Boosted`,
+                    skyGrad: "from-sky-600 via-sky-400 to-emerald-300",
+                    sunOpacity: "opacity-80 scale-100",
+                    rainOpacity: "opacity-0",
+                    rainbowOpacity: "opacity-0",
+                    hillBack: "#15803d",
+                    hillFront: "#22c55e"
                 };
             }
 
-            // Update UI elements with smooth dynamic transitions
             bubble.innerText = impact.text;
             progress.style.width = `${impact.progress}%`;
             seatCount.innerText = impact.seats;
-            ctaBtn.querySelector('span').innerText = `⚡ RALLY WITH $${amount} FOR ORS ⚡`;
+
+            // Smooth Weather Stage Updates
+            skyStage.className = `relative weather-stage bg-gradient-to-b ${impact.skyGrad} h-72 sm:h-84 w-full overflow-hidden flex flex-col justify-between items-center p-4 select-none`;
+            sunContainer.className = `absolute top-3 right-4 text-amber-300 transition-all duration-1000 ${impact.sunOpacity}`;
+            rainContainer.className = `absolute inset-0 pointer-events-none transition-opacity duration-1000 ${impact.rainOpacity}`;
+            rainbowContainer.className = `absolute top-2 inset-x-0 h-40 transition-opacity duration-1000 pointer-events-none flex justify-center ${impact.rainbowOpacity}`;
+            hillBack.setAttribute('fill', impact.hillBack);
+            hillFront.setAttribute('fill', impact.hillFront);
         }
 
-        // Custom Input Handlers
         function focusCustomInput() {
             const container = document.getElementById('customInputContainer');
             container.classList.remove('hidden');
             const input = document.getElementById('customAmount');
             input.focus();
-            
-            // Unselect preset buttons
-            document.querySelectorAll('.donor-btn').forEach(btn => {
-                btn.classList.remove('border-orsRed', 'bg-red-50', 'ring-4', 'ring-red-200');
+
+            document.querySelectorAll('.tier-btn').forEach(btn => {
+                btn.classList.remove('border-orsRed', 'bg-red-50', 'ring-2', 'ring-red-200');
             });
         }
 
         function handleCustomInput(val) {
             const num = parseInt(val) || 0;
-            if (num > 0) {
-                updateImpactDisplay(num);
-            }
+            if (num > 0) updateDisplay(num);
         }
 
         function applyCustomAmount() {
             const input = document.getElementById('customAmount');
             const num = parseInt(input.value) || 50;
             activeAmount = num;
-            triggerMascotZap();
+            triggerLightningZap();
         }
 
-        // WinRed Redirection Handler
-        function executeWinRedRedirection() {
-            // Target WinRed URL path
-            const winRedUrl = `https://winred.com/ors/dems-out-fundraise-copy-4bf87fba43d50f29?amount=${activeAmount}&utm_source=ors_impact_widget`;
-            
-            // If embedded inside iframe on WinRed page, update parent window or direct navigation
-            if (window.top !== window.self) {
-                window.top.location.href = winRedUrl;
-            } else {
-                window.location.href = winRedUrl;
-            }
-        }
-
-        // Default setup on page load
         window.addEventListener('DOMContentLoaded', () => {
-            // Pre-select $100 donation tier
-            const defaultBtn = document.querySelectorAll('.donor-btn')[2];
-            selectDonation(100, defaultBtn);
+            const defaultTierBtn = document.querySelectorAll('.tier-btn')[2]; // $100 Tier default
+            selectDonation(100, defaultTierBtn);
         });
     </script>
 </body>
