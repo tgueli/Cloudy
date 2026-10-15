@@ -419,11 +419,10 @@
 
     </main>
 
-    <!-- Audio Synthesizer & Interactive Logic -->
+    <!-- Audio & Interactive Logic -->
     <script>
         let soundEnabled = true;
         let activeAmount = 100;
-        let audioCtx = null;
 
         // Tier mapped data for weather stages, copy, meter progress and colors
         const impactMap = {
@@ -484,17 +483,6 @@
             }
         };
 
-        function getAudioContext() {
-            if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (AudioContext) audioCtx = new AudioContext();
-            }
-            if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            return audioCtx;
-        }
-
         function toggleAudio() {
             soundEnabled = !soundEnabled;
             const icon = document.getElementById('audioIcon');
@@ -512,72 +500,9 @@
 
         function playLightningAudio() {
             if (!soundEnabled) return;
-
-            // Play the thunderSound audio element if available
             try {
                 thunderSound.currentTime = 0;
-                thunderSound.play().catch(e => console.warn("Audio play prevented:", e));
-            } catch (e) {
-                console.warn("Audio error", e);
-            }
-
-            try {
-                const ctx = getAudioContext();
-                if (!ctx) return;
-                const now = ctx.currentTime;
-
-                // A fast, bright electrical crack.
-                const crackBuffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.22), ctx.sampleRate);
-                const crackData = crackBuffer.getChannelData(0);
-                for (let i = 0; i < crackData.length; i++) {
-                    const t = i / ctx.sampleRate;
-                    crackData[i] = (Math.random() * 2 - 1) * Math.exp(-t * 34);
-                }
-                const crack = ctx.createBufferSource();
-                crack.buffer = crackBuffer;
-                const crackFilter = ctx.createBiquadFilter();
-                crackFilter.type = "highpass";
-                crackFilter.frequency.setValueAtTime(900, now);
-                const crackGain = ctx.createGain();
-                crackGain.gain.setValueAtTime(0.0001, now);
-                crackGain.gain.exponentialRampToValueAtTime(0.72, now + 0.006);
-                crackGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
-                crack.connect(crackFilter).connect(crackGain).connect(ctx.destination);
-                crack.start(now);
-                crack.stop(now + 0.22);
-
-                // A brief, descending electric snap layered over the crack.
-                const snap = ctx.createOscillator();
-                const snapGain = ctx.createGain();
-                snap.type = "sawtooth";
-                snap.frequency.setValueAtTime(1600, now);
-                snap.frequency.exponentialRampToValueAtTime(180, now + 0.11);
-                snapGain.gain.setValueAtTime(0.22, now);
-                snapGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
-                snap.connect(snapGain).connect(ctx.destination);
-                snap.start(now);
-                snap.stop(now + 0.14);
-
-                // Low, rumbling thunder arrives just after the strike.
-                const rumbleBuffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 1.7), ctx.sampleRate);
-                const rumbleData = rumbleBuffer.getChannelData(0);
-                for (let i = 0; i < rumbleData.length; i++) {
-                    const t = i / ctx.sampleRate;
-                    rumbleData[i] = (Math.random() * 2 - 1) * (0.7 + 0.3 * Math.sin(t * 18)) * Math.exp(-t * 2.4);
-                }
-                const rumble = ctx.createBufferSource();
-                rumble.buffer = rumbleBuffer;
-                const lowPass = ctx.createBiquadFilter();
-                lowPass.type = "lowpass";
-                lowPass.frequency.setValueAtTime(240, now + 0.07);
-                lowPass.frequency.exponentialRampToValueAtTime(75, now + 1.55);
-                const rumbleGain = ctx.createGain();
-                rumbleGain.gain.setValueAtTime(0.0001, now + 0.06);
-                rumbleGain.gain.linearRampToValueAtTime(0.48, now + 0.16);
-                rumbleGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.65);
-                rumble.connect(lowPass).connect(rumbleGain).connect(ctx.destination);
-                rumble.start(now + 0.06);
-                rumble.stop(now + 1.7);
+                thunderSound.play().catch(e => console.warn("Audio playback blocked/failed:", e));
             } catch (e) {
                 console.warn("Audio error", e);
             }
