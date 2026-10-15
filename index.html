@@ -81,6 +81,29 @@
 
         .animate-cloud-float {
             animation: floatCloud 4.2s ease-in-out infinite;
+            transform: translateZ(0);
+            will-change: transform;
+            transform-origin: 50% 60%;
+        }
+        #mascotContainer svg { overflow: visible; }
+        #cloudMouth { transform-box: fill-box; transform-origin: 50% 0%; }
+        #mascotContainer.talking #cloudMouth {
+            animation: talkMouth .18s ease-in-out infinite alternate;
+        }
+        #mascotContainer.zapping {
+            animation: mascotZap .22s steps(2, end) 3;
+        }
+        @keyframes talkMouth {
+            from { transform: scaleY(.72) scaleX(.94); }
+            to { transform: scaleY(1.18) scaleX(1.04); }
+        }
+        @keyframes mascotZap {
+            0%, 100% { transform: translate3d(0,0,0) rotate(0); }
+            25% { transform: translate3d(-3px,1px,0) rotate(-1deg); }
+            75% { transform: translate3d(3px,-1px,0) rotate(1deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
         }
 
         .animate-blink {
@@ -243,74 +266,61 @@
                           d="M 200 130 L 190 180 L 210 185 L 180 255 L 202 250 L 190 298" />
                 </svg>
 
-                <!-- Cloud Character (Matches Reference Image: Dark slate gradient, fluffy contour, no star) -->
-                <div id="mascotContainer" class="animate-cloud-float cursor-pointer relative" onclick="triggerLightningZap()">
-                    <svg class="w-44 h-40 sm:w-52 sm:h-48 filter drop-shadow-2xl overflow-visible" viewBox="0 0 200 180">
+                <!-- Smooth cartoon storm-cloud mascot -->
+                <div id="mascotContainer" class="animate-cloud-float cursor-pointer relative" onclick="triggerLightningZap()" role="button" tabindex="0" aria-label="Make the cloud strike lightning">
+                    <svg class="w-52 h-44 sm:w-60 sm:h-52 filter drop-shadow-2xl overflow-visible" viewBox="0 0 260 220" role="img" aria-label="Smiling gray storm cloud with red lightning bolts">
                         <defs>
-                            <linearGradient id="refCloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#94A3B8" />
-                                <stop offset="45%" stop-color="#64748B" />
-                                <stop offset="100%" stop-color="#475569" />
+                            <linearGradient id="cloudBody" x1="0" y1="0" x2="0.15" y2="1">
+                                <stop offset="0" stop-color="#D1D5DB"/>
+                                <stop offset=".48" stop-color="#9CA3AF"/>
+                                <stop offset="1" stop-color="#6B7280"/>
                             </linearGradient>
-
-                            <linearGradient id="cloudHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#CBD5E1" stop-opacity="0.8"/>
-                                <stop offset="100%" stop-color="#94A3B8" stop-opacity="0"/>
+                            <linearGradient id="cloudShade" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#6B7280" stop-opacity="0"/>
+                                <stop offset="1" stop-color="#374151" stop-opacity=".8"/>
                             </linearGradient>
+                            <linearGradient id="boltFill" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#FF7777"/>
+                                <stop offset="1" stop-color="#DC2626"/>
+                            </linearGradient>
+                            <filter id="softCloudShadow" x="-25%" y="-25%" width="150%" height="160%">
+                                <feDropShadow dx="0" dy="5" stdDeviation="3" flood-color="#111827" flood-opacity=".28"/>
+                            </filter>
                         </defs>
-
-                        <!-- Floating Red Accent Bolts -->
-                        <path class="animate-bolt-left" fill="#EF4444" stroke="#B91C1C" stroke-width="2" stroke-linejoin="round"
-                              d="M 22 45 L 48 10 L 36 50 L 58 46 L 15 95 L 24 60 Z" />
-
-                        <path class="animate-bolt-right" fill="#EF4444" stroke="#B91C1C" stroke-width="2" stroke-linejoin="round"
-                              d="M 178 35 L 152 5 L 164 42 L 142 40 L 182 88 L 172 52 Z" />
-
-                        <!-- Cloud Character Dark Shadow Outer Ring -->
-                        <path fill="#334155" d="M 40 130 
-                                 C 15 130, 5 105, 20 85 
-                                 C 10 65, 30 40, 60 45 
-                                 C 75 25, 115 20, 135 40 
-                                 C 165 30, 190 55, 180 80 
-                                 C 195 105, 175 135, 150 132 
-                                 C 135 145, 65 148, 40 130 Z" />
-
-                        <!-- Cloud Main Fluffy Body -->
-                        <path fill="url(#refCloudGrad)" stroke="#1E293B" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"
-                              d="M 42 126 
-                                 C 20 126, 12 102, 25 84 
-                                 C 15 65, 35 42, 62 48 
-                                 C 78 28, 116 24, 134 42 
-                                 C 162 34, 184 58, 176 82 
-                                 C 188 104, 170 128, 146 128 
-                                 C 130 142, 68 142, 42 126 Z" />
-
-                        <!-- Fluff Highlight Curvatures -->
-                        <path fill="url(#cloudHighlight)" d="M 65 48 C 80 32, 112 30, 130 44 C 110 38, 80 40, 65 48 Z" />
-                        <path fill="url(#cloudHighlight)" d="M 28 84 C 20 70, 36 52, 58 52 C 40 56, 28 72, 28 84 Z" />
-
-                        <!-- Eyebrows -->
-                        <path d="M 70 66 Q 82 60 92 68" fill="none" stroke="#1E293B" stroke-width="3.5" stroke-linecap="round" />
-                        <path d="M 108 68 Q 118 60 130 66" fill="none" stroke="#1E293B" stroke-width="3.5" stroke-linecap="round" />
-
-                        <!-- Glossy Cute Eyes -->
-                        <g id="cloudEyes" class="animate-blink">
-                            <ellipse cx="82" cy="88" rx="12" ry="16" fill="#0F172A" />
-                            <circle cx="78" cy="82" r="5" fill="#FFFFFF" />
-                            <circle cx="85" cy="93" r="2" fill="#FFFFFF" />
-
-                            <ellipse cx="118" cy="88" rx="12" ry="16" fill="#0F172A" />
-                            <circle cx="114" cy="82" r="5" fill="#FFFFFF" />
-                            <circle cx="121" cy="93" r="2" fill="#FFFFFF" />
+                        <!-- Red bolts -->
+                        <g stroke="#991B1B" stroke-width="3" stroke-linejoin="round">
+                            <path fill="url(#boltFill)" d="M34 58 10 8 57 48 40 52 70 91 31 67Z"/>
+                            <path fill="url(#boltFill)" d="M222 49 249 5 233 51 254 49 218 91 229 58Z"/>
+                            <path fill="url(#boltFill)" d="M44 148 12 123 27 158 7 157 39 188 30 161Z"/>
+                            <path fill="url(#boltFill)" d="M219 151 249 126 235 161 255 160 223 190 231 164Z"/>
                         </g>
-
-                        <!-- Rosy Blush Cheeks -->
-                        <ellipse cx="66" cy="102" rx="8" ry="4" fill="#F87171" opacity="0.65" />
-                        <ellipse cx="134" cy="102" rx="8" ry="4" fill="#F87171" opacity="0.65" />
-
-                        <!-- Open Smile Mouth with Tongue -->
-                        <path d="M 76 104 Q 100 132 124 104 Z" fill="#DC2626" stroke="#0F172A" stroke-width="3.5" stroke-linejoin="round" />
-                        <path d="M 86 117 Q 100 126 114 117 Q 100 110 86 117 Z" fill="#FCA5A5" />
+                        <!-- Main cloud silhouette -->
+                        <path filter="url(#softCloudShadow)" fill="#374151" d="M57 164C31 168 16 148 22 125C4 101 20 71 48 68C50 39 79 23 104 36C126 9 169 14 185 43C213 37 237 60 232 85C257 99 258 132 236 148C230 171 207 181 185 172C162 194 91 194 68 176Z"/>
+                        <path fill="url(#cloudBody)" stroke="#1F2937" stroke-width="4.5" stroke-linejoin="round" d="M59 158C36 162 22 144 28 124C12 103 26 77 52 74C54 48 80 33 103 44C126 18 164 23 181 49C205 43 226 63 223 86C245 100 246 128 227 143C220 163 201 171 181 164C157 183 94 184 72 169Z"/>
+                        <path fill="url(#cloudShade)" d="M29 121C48 143 65 146 81 139C98 161 131 166 153 151C176 170 206 159 227 139C222 164 201 171 181 164C157 183 94 184 72 169C50 171 34 151 29 121Z"/>
+                        <!-- Soft highlights -->
+                        <path d="M56 76C63 56 82 47 99 51M110 43C132 28 158 34 170 51M188 62C202 58 214 68 215 79" fill="none" stroke="#F9FAFB" stroke-opacity=".7" stroke-width="7" stroke-linecap="round"/>
+                        <path d="M39 105C33 120 41 135 54 139M196 144C210 146 221 136 222 124" fill="none" stroke="#4B5563" stroke-opacity=".55" stroke-width="5" stroke-linecap="round"/>
+                        <!-- Brows -->
+                        <path d="M83 82Q96 72 109 80M151 80Q165 72 178 82" fill="none" stroke="#1F2937" stroke-width="6" stroke-linecap="round"/>
+                        <!-- Eyes -->
+                        <g id="cloudEyes">
+                            <ellipse cx="96" cy="105" rx="15" ry="20" fill="#111827"/>
+                            <ellipse cx="163" cy="105" rx="15" ry="20" fill="#111827"/>
+                            <ellipse cx="92" cy="99" rx="6" ry="7" fill="#FFFFFF"/>
+                            <ellipse cx="159" cy="99" rx="6" ry="7" fill="#FFFFFF"/>
+                            <circle cx="101" cy="112" r="2.5" fill="#FFFFFF"/>
+                            <circle cx="168" cy="112" r="2.5" fill="#FFFFFF"/>
+                        </g>
+                        <!-- Rosy cheeks -->
+                        <ellipse cx="69" cy="124" rx="10" ry="5" fill="#F87171" opacity=".72"/>
+                        <ellipse cx="190" cy="124" rx="10" ry="5" fill="#F87171" opacity=".72"/>
+                        <!-- Smile / talking mouth -->
+                        <g id="cloudMouth">
+                            <path d="M82 126Q130 180 178 126Q171 164 130 164Q91 162 82 126Z" fill="#4C1018" stroke="#1F2937" stroke-width="4" stroke-linejoin="round"/>
+                            <path d="M91 132Q130 145 169 132Q160 150 130 150Q101 149 91 132Z" fill="#FFFFFF"/>
+                            <path d="M112 157Q130 151 148 157Q138 169 126 166Q117 165 112 157Z" fill="#FB7185"/>
+                        </g>
                     </svg>
                 </div>
             </div>
@@ -501,49 +511,63 @@
 
         function playLightningAudio() {
             if (!soundEnabled) return;
-
             try {
                 const ctx = getAudioContext();
                 if (!ctx) return;
                 const now = ctx.currentTime;
 
-                // Electric Zap Oscillator
-                const osc = ctx.createOscillator();
-                const oscGain = ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(850, now);
-                osc.frequency.exponentialRampToValueAtTime(120, now + 0.16);
-                oscGain.gain.setValueAtTime(0.2, now);
-                oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
-                osc.connect(oscGain);
-                oscGain.connect(ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.16);
-
-                // Thunder Noise
-                const bufferSize = ctx.sampleRate * 0.3;
-                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = Math.random() * 2 - 1;
+                // A fast, bright electrical crack.
+                const crackBuffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.22), ctx.sampleRate);
+                const crackData = crackBuffer.getChannelData(0);
+                for (let i = 0; i < crackData.length; i++) {
+                    const t = i / ctx.sampleRate;
+                    crackData[i] = (Math.random() * 2 - 1) * Math.exp(-t * 34);
                 }
+                const crack = ctx.createBufferSource();
+                crack.buffer = crackBuffer;
+                const crackFilter = ctx.createBiquadFilter();
+                crackFilter.type = "highpass";
+                crackFilter.frequency.setValueAtTime(900, now);
+                const crackGain = ctx.createGain();
+                crackGain.gain.setValueAtTime(0.0001, now);
+                crackGain.gain.exponentialRampToValueAtTime(0.72, now + 0.006);
+                crackGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+                crack.connect(crackFilter).connect(crackGain).connect(ctx.destination);
+                crack.start(now);
+                crack.stop(now + 0.22);
 
-                const noise = ctx.createBufferSource();
-                noise.buffer = buffer;
-                const filter = ctx.createBiquadFilter();
-                filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(700, now);
-                filter.frequency.linearRampToValueAtTime(150, now + 0.28);
+                // A brief, descending electric snap layered over the crack.
+                const snap = ctx.createOscillator();
+                const snapGain = ctx.createGain();
+                snap.type = "sawtooth";
+                snap.frequency.setValueAtTime(1600, now);
+                snap.frequency.exponentialRampToValueAtTime(180, now + 0.11);
+                snapGain.gain.setValueAtTime(0.22, now);
+                snapGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
+                snap.connect(snapGain).connect(ctx.destination);
+                snap.start(now);
+                snap.stop(now + 0.14);
 
-                const noiseGain = ctx.createGain();
-                noiseGain.gain.setValueAtTime(0.3, now);
-                noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-
-                noise.connect(filter);
-                filter.connect(noiseGain);
-                noiseGain.connect(ctx.destination);
-                noise.start(now);
-                noise.stop(now + 0.3);
+                // Low, rumbling thunder arrives just after the strike.
+                const rumbleBuffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 1.7), ctx.sampleRate);
+                const rumbleData = rumbleBuffer.getChannelData(0);
+                for (let i = 0; i < rumbleData.length; i++) {
+                    const t = i / ctx.sampleRate;
+                    rumbleData[i] = (Math.random() * 2 - 1) * (0.7 + 0.3 * Math.sin(t * 18)) * Math.exp(-t * 2.4);
+                }
+                const rumble = ctx.createBufferSource();
+                rumble.buffer = rumbleBuffer;
+                const lowPass = ctx.createBiquadFilter();
+                lowPass.type = "lowpass";
+                lowPass.frequency.setValueAtTime(240, now + 0.07);
+                lowPass.frequency.exponentialRampToValueAtTime(75, now + 1.55);
+                const rumbleGain = ctx.createGain();
+                rumbleGain.gain.setValueAtTime(0.0001, now + 0.06);
+                rumbleGain.gain.linearRampToValueAtTime(0.48, now + 0.16);
+                rumbleGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.65);
+                rumble.connect(lowPass).connect(rumbleGain).connect(ctx.destination);
+                rumble.start(now + 0.06);
+                rumble.stop(now + 1.7);
             } catch (e) {
                 console.warn("Audio error", e);
             }
@@ -551,6 +575,11 @@
 
         function triggerLightningZap() {
             playLightningAudio();
+            const mascot = document.getElementById('mascotContainer');
+            mascot.classList.remove('zapping');
+            void mascot.offsetWidth;
+            mascot.classList.add('zapping');
+            window.setTimeout(() => mascot.classList.remove('zapping'), 700);
 
             const flash = document.getElementById('flashOverlay');
             flash.classList.remove('screen-flash');
@@ -627,6 +656,12 @@
             }
 
             bubble.innerText = impact.text;
+            const mascot = document.getElementById('mascotContainer');
+            mascot.classList.remove('talking');
+            void mascot.offsetWidth;
+            mascot.classList.add('talking');
+            window.clearTimeout(window.mascotTalkTimer);
+            window.mascotTalkTimer = window.setTimeout(() => mascot.classList.remove('talking'), 1400);
             progress.style.width = `${impact.progress}%`;
             seatCount.innerText = impact.seats;
 
@@ -661,6 +696,13 @@
             activeAmount = num;
             triggerLightningZap();
         }
+
+        document.getElementById('mascotContainer').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                triggerLightningZap();
+            }
+        });
 
         window.addEventListener('DOMContentLoaded', () => {
             const defaultTierBtn = document.querySelectorAll('.tier-btn')[2]; // $100 Tier default
